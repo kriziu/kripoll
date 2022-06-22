@@ -2,20 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .input {
+    @apply w-full rounded-lg border-none bg-zinc-400/20 p-2 px-4 text-white placeholder:text-zinc-500;
+  }
+
+  .btn-text {
+    @apply w-max rounded-sm font-bold text-violet-400 transition-transform hover:scale-105 focus:scale-110 active:scale-100;
+  }
+
+  .btn {
+    @apply w-full rounded-lg bg-gradient-to-br from-indigo-700 to-purple-500 p-2 font-semibold transition-transform hover:scale-105 active:scale-100;
+  }
+}
+
 * {
-  @apply font-montserrat font-medium;
+  @apply font-montserrat font-medium text-white focus:outline-none focus:ring focus:ring-violet-600;
 }
 
 body {
   min-height: 100vh;
   min-height: -webkit-fill-available;
 }
+
 html {
   height: -webkit-fill-available;
 }
 
 #__next {
   position: absolute;
+  height: 100%;
   top: 0;
   bottom: 0;
   left: 0;
