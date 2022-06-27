@@ -46,7 +46,7 @@ const data = {
 
 const Results = () => {
   return (
-    <div className="mt-3 flex gap-4">
+    <div className="mt-3 flex flex-col-reverse gap-4 md:flex-row">
       <div className="flex flex-1 flex-col gap-2">
         <OptionScore
           title="Apple"
@@ -72,17 +72,19 @@ const Results = () => {
 
         <p className="text-sm font-semibold">Total votes: 279</p>
       </div>
-      <div className="w-2/5">
-        <Pie
-          data={data}
-          options={{
-            plugins: {
-              legend: {
-                display: false,
+      <div className="flex w-full justify-center md:w-2/5">
+        <div className="w-1/2 min-w-[15rem] md:w-full">
+          <Pie
+            data={data}
+            options={{
+              plugins: {
+                legend: {
+                  display: false,
+                },
               },
-            },
-          }}
-        />
+            }}
+          />
+        </div>
       </div>
     </div>
   );
