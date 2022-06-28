@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Duplication {
+  IP
+  COOKIE
+  NONE
+}
+
+model Poll {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now()) @db.Date
+  title       String
+  description String?
+  optionLabels String[]
+  optionVotes Int[]
+  allowMultipleVotes Boolean?
+  allowCreateOption Boolean?
+  requireName Boolean?
+  duplicationCheck Duplication
+  votedIPs    String[]
+  endDate     DateTime?
+  passwordToResults    String?
+}
