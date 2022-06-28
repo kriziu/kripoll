@@ -1,26 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const Answer = ({ title }: { title: string }) => {
   const [checked, setChecked] = useState(false);
-  const [id, setId] = useState('');
-
-  useEffect(() => {
-    setId(Math.random().toString());
-  }, []);
 
   return (
     <div>
-      <input
-        type="checkbox"
-        id={id}
-        onChange={() => setChecked((prev) => !prev)}
-        checked={checked}
-        className="hidden"
-      />
-      <label
-        htmlFor={id}
-        className="flex w-max cursor-pointer select-none items-center gap-2"
-      >
+      <label className="flex w-max cursor-pointer select-none items-center gap-2">
+        <input
+          type="checkbox"
+          onChange={() => setChecked((prev) => !prev)}
+          checked={checked}
+          className="hidden"
+        />
         <div className="flex h-5 w-5 items-center justify-center rounded-full bg-zinc-400/20">
           <div
             className={`h-3 w-3 rounded-full bg-violet-500 ${
