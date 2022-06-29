@@ -1,8 +1,12 @@
+import type { PollConfigurationProps } from './Home';
 import Options from './Options';
 
-const Inputs = () => {
+const Inputs = ({
+  pollConfiguration,
+  setPollConfiguration,
+}: PollConfigurationProps) => {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="mb-4 flex flex-col gap-5">
       <div>
         <label className="font-bold" htmlFor="title">
           Title
@@ -12,6 +16,13 @@ const Inputs = () => {
           type="text"
           placeholder="Enter title..."
           id="title"
+          value={pollConfiguration.title}
+          onChange={(e) =>
+            setPollConfiguration({
+              ...pollConfiguration,
+              title: e.target.value,
+            })
+          }
         />
       </div>
       <div>
@@ -27,10 +38,19 @@ const Inputs = () => {
           type="text"
           placeholder="Enter description..."
           id="desc"
+          value={pollConfiguration.description}
+          onChange={(e) =>
+            setPollConfiguration({
+              ...pollConfiguration,
+              description: e.target.value,
+            })
+          }
         />
       </div>
-
-      <Options />
+      <Options
+        pollConfiguration={pollConfiguration}
+        setPollConfiguration={setPollConfiguration}
+      />
     </div>
   );
 };

@@ -18,7 +18,7 @@ model Poll {
   createdAt   DateTime @default(now()) @db.Date
   title       String
   description String?
-  optionLabels String[]
+  options String[]
   optionVotes Int[]
   allowMultipleVotes Boolean?
   allowCreateOption Boolean?
