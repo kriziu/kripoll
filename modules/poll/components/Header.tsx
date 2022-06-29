@@ -1,10 +1,12 @@
-const Header = () => {
+import { useTimeAgo } from '@/common/hooks/useTimeAgo';
+
+const Header = ({ title, createdAt }: { title: string; createdAt: Date }) => {
+  const timeAgo = useTimeAgo(createdAt);
+
   return (
     <div>
-      <h1 className="text-3xl font-bold leading-none">
-        What fruit is the best?
-      </h1>
-      <p className="ml-1 text-sm leading-none text-zinc-400">3 weeks ago </p>
+      <h1 className="text-3xl font-bold leading-none">{title}</h1>
+      <p className="ml-1 text-sm leading-none text-zinc-400">{timeAgo}</p>
     </div>
   );
 };

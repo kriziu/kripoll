@@ -15,7 +15,7 @@ enum Duplication {
 
 model Poll {
   id          String   @id @default(uuid())
-  createdAt   DateTime @default(now()) @db.Date
+  createdAt   DateTime @default(now())
   title       String
   description String?
   options String[]

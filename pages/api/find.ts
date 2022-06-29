@@ -9,8 +9,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     where: { id: pollId.toString() },
   });
 
-  console.log(poll);
-
   res.status(200).json(poll);
 };
 

@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import type { Poll } from '@prisma/client';
+import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -9,12 +11,23 @@ import Comments from './Comments';
 import Header from './Header';
 import Results from './Results';
 
-const Poll = () => {
+const PollC = () => {
   const [results, setResults] = useState(false);
+  const [poll, setPoll] = useState<Poll | null>(null);
 
-  const { id } = useRouter().query;
+  const router = useRouter();
 
-  console.log(id);
+  const { id } = router.query;
+
+  useEffect(() => {
+    if (id)
+      axios.get<Poll | null>(`/api/find?id=${id}`).then((res) => {
+        if (!res.data) router.push('/');
+        else setPoll(res.data);
+      });
+  }, [id, router]);
+
+  if (!poll) return <div></div>;
 
   return (
     <>
@@ -28,7 +41,7 @@ const Poll = () => {
 
       <div className="mt-16 flex flex-col items-center md:mt-24">
         <div className="px-6 sm:w-96 sm:px-0 md:w-160">
-          <Header />
+          <Header {...poll} />
           {results ? <Results /> : <Answers />}
           <Btns results={results} setResults={setResults} />
           <Comments />
@@ -38,4 +51,4 @@ const Poll = () => {
   );
 };
 
-export default Poll;
+export default PollC;
