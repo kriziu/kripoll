@@ -1,6 +1,9 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 
 import axios from 'axios';
+import { useRouter } from 'next/router';
+
+import Spinner from '@/common/components/Spinner';
 
 import Header from './Header';
 import Inputs from './Inputs';
@@ -22,15 +25,31 @@ const DEFAULT_POLL_CONFIGURATION: {
 };
 
 const Home = () => {
+  const [loading, setLoading] = useState(false);
   const [pollConfiguration, setPollConfiguration] = useState<PollConfiguration>(
     DEFAULT_POLL_CONFIGURATION
   );
 
+  const router = useRouter();
+
   const handleCreatePoll = () => {
+    const { title, options } = pollConfiguration;
+    let block = !title;
+    options.forEach((option) => {
+      if (!option) block = true;
+    });
+
+    if (block) return;
+
+    setLoading(true);
     axios
-      .post<any, any, PollConfiguration>('/api/create', pollConfiguration)
+      .post<any, { data: { id: string } }, PollConfiguration>(
+        '/api/create',
+        pollConfiguration
+      )
       .then((res) => {
-        console.log(res);
+        setLoading(false);
+        router.push(`/${res.data.id}`);
         setPollConfiguration(DEFAULT_POLL_CONFIGURATION);
       });
   };
@@ -50,8 +69,11 @@ const Home = () => {
           setPollConfiguration={setPollConfiguration}
         />
 
-        <button className="btn my-10" onClick={handleCreatePoll}>
-          Create poll
+        <button
+          className="btn my-10 flex items-center justify-center"
+          onClick={handleCreatePoll}
+        >
+          {loading ? <Spinner /> : 'Create poll'}
         </button>
       </div>
     </div>
