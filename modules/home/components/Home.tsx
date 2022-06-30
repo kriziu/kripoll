@@ -17,11 +17,11 @@ export interface PollConfigurationProps {
 const DEFAULT_POLL_CONFIGURATION: {
   title: string;
   duplicationCheck: 'IP' | 'COOKIE' | 'NONE';
-  options: string[];
+  answers: string[];
 } = {
   title: '',
   duplicationCheck: 'IP',
-  options: ['', ''],
+  answers: ['', ''],
 };
 
 const Home = () => {
@@ -33,10 +33,10 @@ const Home = () => {
   const router = useRouter();
 
   const handleCreatePoll = () => {
-    const { title, options } = pollConfiguration;
+    const { title, answers } = pollConfiguration;
     let block = !title;
-    options.forEach((option) => {
-      if (!option) block = true;
+    answers.forEach((answer) => {
+      if (!answer) block = true;
     });
 
     if (block) return;

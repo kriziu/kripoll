@@ -1,6 +1,10 @@
 import { useTimeAgo } from '@/common/hooks/useTimeAgo';
 
-const Header = ({ title, createdAt }: { title: string; createdAt: Date }) => {
+import { usePoll } from '../context/pollContext';
+
+const Header = () => {
+  const { createdAt, title } = usePoll();
+
   const timeAgo = useTimeAgo(createdAt);
 
   return (

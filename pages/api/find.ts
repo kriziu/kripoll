@@ -7,6 +7,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const poll = await prisma.poll.findUnique({
     where: { id: pollId.toString() },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      answers: true,
+      createdAt: true,
+      allowCreateAnswer: true,
+      allowMultipleAnswers: true,
+      requireName: true,
+      endDate: true,
+    },
   });
 
   res.status(200).json(poll);

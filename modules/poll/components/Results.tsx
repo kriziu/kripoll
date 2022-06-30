@@ -1,6 +1,8 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 
+import { usePoll } from '../context/pollContext';
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const OptionScore = ({
@@ -32,45 +34,43 @@ const OptionScore = ({
   );
 };
 
-const data = {
-  labels: ['Apple', 'Banana', 'Orange', 'Strawberry'],
-  datasets: [
-    {
-      label: '# of Votes',
-      data: [200, 20, 54, 5],
-      backgroundColor: ['#22c55e', '#ef4444', '#3b82f6', '#8b5cf6'],
-      borderWidth: 0,
-    },
-  ],
-};
-
 const Results = () => {
+  const { options, optionVotes } = usePoll();
+
+  const totalVotes = optionVotes.reduce((total, votes) => total + votes, 0);
+
+  const data = {
+    labels: options,
+    datasets: [
+      {
+        label: '# of Votes',
+        data: optionVotes,
+        backgroundColor: ['#22c55e', '#ef4444', '#3b82f6', '#8b5cf6'],
+        borderWidth: 0,
+      },
+    ],
+  };
+
   return (
     <div className="mt-3 flex flex-col-reverse gap-4 md:flex-row">
       <div className="flex flex-1 flex-col gap-2">
-        <OptionScore
-          title="Apple"
-          score={64.1}
-          votes={200}
-          color="bg-green-500"
-        />
-        <OptionScore
-          title="Banana"
-          score={8.56}
-          votes={20}
-          color="bg-red-500"
-        />
-        <OptionScore title="Orange" score={12} votes={54} color="bg-blue-500" />
-        <OptionScore
-          title="Strawberry"
-          score={3.5}
-          votes={5}
-          color="bg-violet-500"
-        />
+        {options.map((option, index) => {
+          const votes = optionVotes[index];
+
+          return (
+            <OptionScore
+              key={index}
+              title={option}
+              score={totalVotes ? (votes / totalVotes) * 100 : 0}
+              votes={votes}
+              color="bg-green-500"
+            />
+          );
+        })}
 
         <div className="mt-3 mb-1 h-[2px] w-full bg-zinc-800"></div>
 
-        <p className="text-sm font-semibold">Total votes: 279</p>
+        <p className="text-sm font-semibold">Total votes: {totalVotes}</p>
       </div>
       <div className="flex w-full justify-center md:w-2/5">
         <div className="w-1/2 min-w-[15rem] md:w-full">

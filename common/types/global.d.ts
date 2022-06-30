@@ -1,11 +1,11 @@
 export declare global {
   interface PollConfiguration {
     title: string;
-    options: string[];
+    answers: string[];
     duplicationCheck: 'IP' | 'COOKIE' | 'NONE';
     description?: string;
-    allowMultipleVotes?: boolean;
-    allowCreateOption?: boolean;
+    allowMultipleAnswers?: boolean;
+    allowCreateAnswer?: boolean;
     requireName?: boolean;
     endDate?: Date;
     passwordToResults?: string;

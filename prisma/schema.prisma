@@ -18,10 +18,10 @@ model Poll {
   createdAt   DateTime @default(now())
   title       String
   description String?
-  options String[]
-  optionVotes Int[]
-  allowMultipleVotes Boolean?
-  allowCreateOption Boolean?
+  answers String[]
+  answersVotes Int[]
+  allowMultipleAnswers Boolean?
+  allowCreateAnswer Boolean?
   requireName Boolean?
   duplicationCheck Duplication
   votedIPs    String[]

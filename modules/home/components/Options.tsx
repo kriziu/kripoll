@@ -2,30 +2,32 @@ import { AiOutlineClose } from 'react-icons/ai';
 
 import type { PollConfigurationProps } from './Home';
 
+// rename options to answers to make life easier
+
 const Options = ({
   pollConfiguration,
   setPollConfiguration,
 }: PollConfigurationProps) => {
-  const { options, allowCreateOption } = pollConfiguration;
+  const { answers, allowCreateAnswer } = pollConfiguration;
 
   return (
     <div>
       <p className="font-bold">Options</p>
       <div className="flex flex-col gap-3">
-        {options.map((option, index) => (
+        {answers.map((answer, index) => (
           <div key={index} className="relative">
             <input
               className="input"
               type="text"
               placeholder={`Enter ${index + 1} option...`}
-              value={option}
+              value={answer}
               onChange={(e) =>
                 setPollConfiguration({
                   ...pollConfiguration,
-                  options: [
-                    ...options.slice(0, index),
+                  answers: [
+                    ...answers.slice(0, index),
                     e.target.value,
-                    ...options.slice(index + 1),
+                    ...answers.slice(index + 1),
                   ],
                 })
               }
@@ -36,9 +38,9 @@ const Options = ({
                 onClick={() =>
                   setPollConfiguration({
                     ...pollConfiguration,
-                    options: [
-                      ...options.slice(0, index),
-                      ...options.slice(index + 1),
+                    answers: [
+                      ...answers.slice(0, index),
+                      ...answers.slice(index + 1),
                     ],
                   })
                 }
@@ -54,7 +56,7 @@ const Options = ({
             onClick={() =>
               setPollConfiguration({
                 ...pollConfiguration,
-                options: [...options, ''],
+                answers: [...answers, ''],
               })
             }
           >
@@ -62,12 +64,12 @@ const Options = ({
           </button>
           <button
             className={`btn-text ${
-              allowCreateOption ? 'text-green-500' : 'text-red-500'
+              allowCreateAnswer ? 'text-green-500' : 'text-red-500'
             }`}
             onClick={() =>
               setPollConfiguration({
                 ...pollConfiguration,
-                allowCreateOption: !allowCreateOption,
+                allowCreateAnswer: !allowCreateAnswer,
               })
             }
           >

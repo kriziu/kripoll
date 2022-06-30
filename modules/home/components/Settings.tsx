@@ -8,7 +8,7 @@ const Settings = ({
   setPollConfiguration,
 }: PollConfigurationProps) => {
   const {
-    allowMultipleVotes,
+    allowMultipleAnswers,
     requireName,
     passwordToResults,
     duplicationCheck,
@@ -30,15 +30,15 @@ const Settings = ({
               onChange={() =>
                 setPollConfiguration({
                   ...pollConfiguration,
-                  allowMultipleVotes: !allowMultipleVotes,
+                  allowMultipleAnswers: !allowMultipleAnswers,
                 })
               }
-              checked={allowMultipleVotes}
+              checked={allowMultipleAnswers}
             />
             <div className="flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-zinc-400/20">
               <div
                 className={`h-3 w-3 rounded-full bg-violet-500 ${
-                  !allowMultipleVotes && 'hidden'
+                  !allowMultipleAnswers && 'hidden'
                 }`}
               ></div>
             </div>

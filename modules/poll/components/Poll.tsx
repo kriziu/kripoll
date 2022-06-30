@@ -5,6 +5,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import PollProvider from '../context/pollContext';
 import Answers from './Answers';
 import Btns from './Btns';
 import Comments from './Comments';
@@ -27,10 +28,10 @@ const PollC = () => {
       });
   }, [id, router]);
 
-  if (!poll) return <div></div>;
+  if (!poll) return null;
 
   return (
-    <>
+    <PollProvider poll={poll}>
       <div className="ml-4 pt-4 md:ml-10 md:pt-10">
         <Link href="/">
           <a className="bg-gradient-to-br from-indigo-700 to-purple-500 bg-clip-text text-center text-4xl font-extrabold uppercase leading-none text-transparent">
@@ -41,13 +42,13 @@ const PollC = () => {
 
       <div className="mt-16 flex flex-col items-center md:mt-24">
         <div className="px-6 sm:w-96 sm:px-0 md:w-160">
-          <Header {...poll} />
+          <Header />
           {results ? <Results /> : <Answers />}
           <Btns results={results} setResults={setResults} />
           <Comments />
         </div>
       </div>
-    </>
+    </PollProvider>
   );
 };
 

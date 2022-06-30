@@ -8,7 +8,7 @@ interface CreateRequest extends NextApiRequest {
 
 const handler = async (req: CreateRequest, res: NextApiResponse) => {
   const newPoll = await prisma.poll.create({
-    data: { ...req.body, optionVotes: req.body.options.map(() => 0) },
+    data: { ...req.body, answersVotes: req.body.answers.map(() => 0) },
   });
 
   res.status(200).json({ id: newPoll.id });

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { usePoll } from '../context/pollContext';
+
 const Answer = ({ title }: { title: string }) => {
   const [checked, setChecked] = useState(false);
 
@@ -26,24 +28,29 @@ const Answer = ({ title }: { title: string }) => {
 };
 
 const Answers = () => {
+  const { answers, allowCreateAnswer, allowMultipleAnswers } = usePoll();
+
   return (
     <div className="flex flex-col gap-3">
       <p className="mt-3 font-semibold">Make a choice:</p>
 
-      <Answer title="Apple" />
-      <Answer title="Banana" />
-      <Answer title="Orange" />
-      <Answer title="Strawberry" />
+      {answers.map((answer, index) => (
+        <Answer key={index} title={answer} />
+      ))}
 
-      <div>
-        <label htmlFor="option">Add new option:</label>
-        <input type="text" className="input" id="option" />
-      </div>
+      {allowCreateAnswer && (
+        <div>
+          <label htmlFor="option">Add new option:</label>
+          <input type="text" className="input" id="option" />
+        </div>
+      )}
 
-      <div>
-        <label htmlFor="nameoption">Your name:</label>
-        <input type="text" className="input" id="nameoption" />
-      </div>
+      {allowMultipleAnswers && (
+        <div>
+          <label htmlFor="nameoption">Your name:</label>
+          <input type="text" className="input" id="nameoption" />
+        </div>
+      )}
     </div>
   );
 };
