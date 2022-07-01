@@ -31,7 +31,10 @@ const PollC = () => {
   if (!poll) return null;
 
   return (
-    <PollProvider poll={poll}>
+    <PollProvider
+      poll={poll}
+      setPoll={(newPoll: PublicPoll) => setPoll(newPoll)}
+    >
       <div className="ml-4 pt-4 md:ml-10 md:pt-10">
         <Link href="/">
           <a className="bg-gradient-to-br from-indigo-700 to-purple-500 bg-clip-text text-center text-4xl font-extrabold uppercase leading-none text-transparent">

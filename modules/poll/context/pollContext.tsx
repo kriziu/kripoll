@@ -7,22 +7,37 @@ export type PublicPoll = Omit<
   'answersVotes' | 'duplicationCheck' | 'votedIPs' | 'passwordToResults'
 >;
 
-const pollContext = createContext<PublicPoll>({} as PublicPoll);
+const pollContext = createContext<{
+  poll: PublicPoll;
+  setPoll: (poll: PublicPoll) => void;
+}>({} as any);
 
 export const usePoll = () => {
-  const poll = useContext(pollContext);
+  const { poll } = useContext(pollContext);
 
   return poll;
+};
+
+export const useSetPoll = () => {
+  const { setPoll } = useContext(pollContext);
+
+  return setPoll;
 };
 
 const PollProvider = ({
   children,
   poll,
+  setPoll,
 }: {
   children: ReactNode;
   poll: PublicPoll;
+  setPoll: (poll: PublicPoll) => void;
 }) => {
-  return <pollContext.Provider value={poll}>{children}</pollContext.Provider>;
+  return (
+    <pollContext.Provider value={{ poll, setPoll }}>
+      {children}
+    </pollContext.Provider>
+  );
 };
 
 export default PollProvider;

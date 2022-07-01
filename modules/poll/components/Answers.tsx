@@ -1,6 +1,10 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 
-import { usePoll } from '../context/pollContext';
+import axios from 'axios';
+import { AiOutlinePlus } from 'react-icons/ai';
+
+import { usePoll, useSetPoll } from '../context/pollContext';
+import type { PublicPoll } from '../context/pollContext';
 import Btns from './Btns';
 
 const Answer = ({
@@ -39,11 +43,28 @@ const Answers = ({
 }: {
   setResults: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const { answers, allowCreateAnswer, allowMultipleAnswers, requireName } =
+  const { answers, allowCreateAnswer, allowMultipleAnswers, requireName, id } =
     usePoll();
+  const setPoll = useSetPoll();
 
   const [checkedAnswers, setCheckedAnswers] = useState<number[]>([]);
-  // const [name, setName] = useState('');
+
+  const [newAnswer, setNewAnswer] = useState('');
+  const [name, setName] = useState('');
+
+  const handleAddNewAnswer = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    axios
+      .post<PublicPoll>('/api/addAnswer', {
+        pollId: id,
+        answer: newAnswer,
+      })
+      .then((res) => {
+        setPoll(res.data);
+        setNewAnswer('');
+      });
+  };
 
   return (
     <>
@@ -68,15 +89,35 @@ const Answers = ({
 
         {allowCreateAnswer && (
           <div>
-            <label htmlFor="option">Add new option:</label>
-            <input type="text" className="input" id="option" />
+            <label htmlFor="answer">Add new answer:</label>
+            <form className="relative" onSubmit={handleAddNewAnswer}>
+              <input
+                type="text"
+                className="input"
+                id="answer"
+                value={newAnswer}
+                onChange={(e) => setNewAnswer(e.target.value)}
+              />
+              <button
+                className="absolute right-0 top-0 flex h-full w-10 items-center justify-center rounded-lg bg-zinc-600 transition-colors hover:bg-zinc-500"
+                type="submit"
+              >
+                <AiOutlinePlus />
+              </button>
+            </form>
           </div>
         )}
 
         {requireName && (
           <div>
-            <label htmlFor="nameoption">Your name:</label>
-            <input type="text" className="input" id="nameoption" />
+            <label htmlFor="nameanswer">Your name:</label>
+            <input
+              type="text"
+              className="input"
+              id="nameanswer"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
         )}
       </div>
