@@ -1,5 +1,5 @@
+import Answers from './Answers';
 import type { PollConfigurationProps } from './Home';
-import Options from './Options';
 
 const Inputs = ({
   pollConfiguration,
@@ -47,7 +47,7 @@ const Inputs = ({
           }
         />
       </div>
-      <Options
+      <Answers
         pollConfiguration={pollConfiguration}
         setPollConfiguration={setPollConfiguration}
       />

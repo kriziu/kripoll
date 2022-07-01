@@ -2,9 +2,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 
 import type { PollConfigurationProps } from './Home';
 
-// rename options to answers to make life easier
-
-const Options = ({
+const Answers = ({
   pollConfiguration,
   setPollConfiguration,
 }: PollConfigurationProps) => {
@@ -12,14 +10,14 @@ const Options = ({
 
   return (
     <div>
-      <p className="font-bold">Options</p>
+      <p className="font-bold">Answers</p>
       <div className="flex flex-col gap-3">
         {answers.map((answer, index) => (
           <div key={index} className="relative">
             <input
               className="input"
               type="text"
-              placeholder={`Enter ${index + 1} option...`}
+              placeholder={`Enter ${index + 1} answer...`}
               value={answer}
               onChange={(e) =>
                 setPollConfiguration({
@@ -60,7 +58,7 @@ const Options = ({
               })
             }
           >
-            Add option
+            Add answer
           </button>
           <button
             className={`btn-text ${
@@ -73,7 +71,7 @@ const Options = ({
               })
             }
           >
-            Option creation
+            Answer creation
           </button>
         </div>
       </div>
@@ -81,4 +79,4 @@ const Options = ({
   );
 };
 
-export default Options;
+export default Answers;
