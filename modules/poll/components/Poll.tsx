@@ -6,15 +6,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import PollProvider from '../context/pollContext';
+import type { PublicPoll } from '../context/pollContext';
 import Answers from './Answers';
-import Btns from './Btns';
 import Comments from './Comments';
 import Header from './Header';
 import Results from './Results';
 
 const PollC = () => {
   const [results, setResults] = useState(false);
-  const [poll, setPoll] = useState<Poll | null>(null);
+  const [poll, setPoll] = useState<PublicPoll | null>(null);
 
   const router = useRouter();
 
@@ -43,8 +43,12 @@ const PollC = () => {
       <div className="mt-16 flex flex-col items-center md:mt-24">
         <div className="px-6 sm:w-96 sm:px-0 md:w-160">
           <Header />
-          {results ? <Results /> : <Answers />}
-          <Btns results={results} setResults={setResults} />
+          {results ? (
+            <Results setResults={setResults} />
+          ) : (
+            <Answers setResults={setResults} />
+          )}
+
           <Comments />
         </div>
       </div>

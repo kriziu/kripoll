@@ -1,16 +1,23 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
 import { usePoll } from '../context/pollContext';
+import Btns from './Btns';
 
-const Answer = ({ title }: { title: string }) => {
-  const [checked, setChecked] = useState(false);
-
+const Answer = ({
+  title,
+  checked,
+  onCheck,
+}: {
+  title: string;
+  checked: boolean;
+  onCheck: () => void;
+}) => {
   return (
     <div>
       <label className="flex w-max cursor-pointer select-none items-center gap-2">
         <input
           type="checkbox"
-          onChange={() => setChecked((prev) => !prev)}
+          onChange={onCheck}
           checked={checked}
           className="hidden"
         />
@@ -27,31 +34,54 @@ const Answer = ({ title }: { title: string }) => {
   );
 };
 
-const Answers = () => {
-  const { answers, allowCreateAnswer, allowMultipleAnswers } = usePoll();
+const Answers = ({
+  setResults,
+}: {
+  setResults: Dispatch<SetStateAction<boolean>>;
+}) => {
+  const { answers, allowCreateAnswer, allowMultipleAnswers, requireName } =
+    usePoll();
+
+  const [checkedAnswers, setCheckedAnswers] = useState<number[]>([]);
+  // const [name, setName] = useState('');
 
   return (
-    <div className="flex flex-col gap-3">
-      <p className="mt-3 font-semibold">Make a choice:</p>
+    <>
+      <div className="flex flex-col gap-3">
+        <p className="mt-3 font-semibold">Make a choice:</p>
 
-      {answers.map((answer, index) => (
-        <Answer key={index} title={answer} />
-      ))}
+        {answers.map((answer, index) => (
+          <Answer
+            key={index}
+            title={answer}
+            checked={checkedAnswers.includes(index)}
+            onCheck={() =>
+              setCheckedAnswers((prev) => {
+                if (prev.includes(index))
+                  return prev.filter((i) => i !== index);
+                if (allowMultipleAnswers) return [...prev, index];
+                return [index];
+              })
+            }
+          />
+        ))}
 
-      {allowCreateAnswer && (
-        <div>
-          <label htmlFor="option">Add new option:</label>
-          <input type="text" className="input" id="option" />
-        </div>
-      )}
+        {allowCreateAnswer && (
+          <div>
+            <label htmlFor="option">Add new option:</label>
+            <input type="text" className="input" id="option" />
+          </div>
+        )}
 
-      {allowMultipleAnswers && (
-        <div>
-          <label htmlFor="nameoption">Your name:</label>
-          <input type="text" className="input" id="nameoption" />
-        </div>
-      )}
-    </div>
+        {requireName && (
+          <div>
+            <label htmlFor="nameoption">Your name:</label>
+            <input type="text" className="input" id="nameoption" />
+          </div>
+        )}
+      </div>
+      <Btns setResults={setResults} checkedAnswers={checkedAnswers} />
+    </>
   );
 };
 

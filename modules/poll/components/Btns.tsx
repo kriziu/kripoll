@@ -1,16 +1,39 @@
 import { Dispatch, SetStateAction } from 'react';
 
+import axios from 'axios';
 import { BiArrowBack, BiStation } from 'react-icons/bi';
 import { FaShare } from 'react-icons/fa';
 import { IoIosStats } from 'react-icons/io';
 
-const Btns = ({
-  results,
-  setResults,
-}: {
+import { usePoll } from '../context/pollContext';
+
+export interface VoteType {
+  pollId: string;
+  checkedAnswers: number[];
+}
+
+interface Props {
   results?: boolean;
   setResults: Dispatch<SetStateAction<boolean>>;
-}) => {
+  checkedAnswers?: number[];
+}
+
+const Btns = ({ results, setResults, checkedAnswers }: Props) => {
+  const { id } = usePoll();
+
+  const handleVote = () => {
+    if (results || !checkedAnswers || !checkedAnswers.length) return;
+
+    axios
+      .post('/api/vote', {
+        pollId: id,
+        checkedAnswers,
+      })
+      .then((res) => {
+        console.log(res);
+      });
+  };
+
   return (
     <div className="mt-6 flex w-full gap-4">
       {results && (
@@ -18,7 +41,11 @@ const Btns = ({
           <BiStation /> Live results
         </div>
       )}
-      {!results && <button className="btn flex-1">Vote</button>}
+      {!results && (
+        <button className="btn flex-1" onClick={handleVote}>
+          Vote
+        </button>
+      )}
 
       <div className="flex flex-1 gap-4">
         {results && (

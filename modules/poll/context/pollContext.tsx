@@ -1,8 +1,13 @@
 import { createContext, ReactNode, useContext } from 'react';
 
-import { Poll } from '@prisma/client';
+import type { Poll } from '@prisma/client';
 
-const pollContext = createContext<Poll>({} as Poll);
+export type PublicPoll = Omit<
+  Poll,
+  'answersVotes' | 'duplicationCheck' | 'votedIPs' | 'passwordToResults'
+>;
+
+const pollContext = createContext<PublicPoll>({} as PublicPoll);
 
 export const usePoll = () => {
   const poll = useContext(pollContext);
@@ -15,7 +20,7 @@ const PollProvider = ({
   poll,
 }: {
   children: ReactNode;
-  poll: Poll;
+  poll: PublicPoll;
 }) => {
   return <pollContext.Provider value={poll}>{children}</pollContext.Provider>;
 };
