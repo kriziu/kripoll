@@ -6,7 +6,7 @@ const Answers = ({
   pollConfiguration,
   setPollConfiguration,
 }: PollConfigurationProps) => {
-  const { answers, allowCreateAnswer } = pollConfiguration;
+  const { answers } = pollConfiguration;
 
   return (
     <div>
@@ -48,32 +48,17 @@ const Answers = ({
             )}
           </div>
         ))}
-        <div className="-mt-2 flex justify-between">
-          <button
-            className="btn-text"
-            onClick={() =>
-              setPollConfiguration({
-                ...pollConfiguration,
-                answers: [...answers, ''],
-              })
-            }
-          >
-            Add answer
-          </button>
-          <button
-            className={`btn-text ${
-              allowCreateAnswer ? 'text-green-500' : 'text-red-500'
-            }`}
-            onClick={() =>
-              setPollConfiguration({
-                ...pollConfiguration,
-                allowCreateAnswer: !allowCreateAnswer,
-              })
-            }
-          >
-            Answer creation
-          </button>
-        </div>
+        <button
+          className="btn-text -mt-2"
+          onClick={() =>
+            setPollConfiguration({
+              ...pollConfiguration,
+              answers: [...answers, ''],
+            })
+          }
+        >
+          Add answer
+        </button>
       </div>
     </div>
   );

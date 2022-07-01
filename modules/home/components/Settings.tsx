@@ -9,6 +9,7 @@ const Settings = ({
 }: PollConfigurationProps) => {
   const {
     allowMultipleAnswers,
+    allowCreateAnswer,
     requireName,
     passwordToResults,
     duplicationCheck,
@@ -18,8 +19,32 @@ const Settings = ({
   return (
     <div>
       <p className="font-bold">Settings</p>
-      <div className="flex flex-col gap-5 md:h-36 md:flex-row">
+      <div className="flex flex-col gap-5 md:h-44 md:flex-row">
         <div className="mt-2 flex flex-1 flex-col gap-2">
+          <label className="flex items-center justify-between" tabIndex={0}>
+            <p className="cursor-pointer select-none font-semibold text-zinc-400">
+              Allow create answer
+            </p>
+            <input
+              type="checkbox"
+              className="hidden"
+              onChange={() =>
+                setPollConfiguration({
+                  ...pollConfiguration,
+                  allowCreateAnswer: !allowCreateAnswer,
+                })
+              }
+              checked={allowCreateAnswer}
+            />
+            <div className="flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-zinc-400/20">
+              <div
+                className={`h-3 w-3 rounded-full bg-violet-500 ${
+                  !allowCreateAnswer && 'hidden'
+                }`}
+              ></div>
+            </div>
+          </label>
+
           <label className="flex items-center justify-between" tabIndex={0}>
             <p className="cursor-pointer select-none font-semibold text-zinc-400">
               Allow multiple choices

@@ -58,7 +58,7 @@ const Home = () => {
     <div className="flex h-full w-full flex-col items-center">
       <Header />
 
-      <div className="sm:w-96 md:w-160">
+      <div className="w-full px-6 sm:w-96 sm:px-0 md:w-160">
         <Inputs
           pollConfiguration={pollConfiguration}
           setPollConfiguration={setPollConfiguration}
@@ -70,7 +70,7 @@ const Home = () => {
         />
 
         <button
-          className="btn my-10 flex items-center justify-center"
+          className="btn mt-5 mb-10 flex items-center justify-center"
           onClick={handleCreatePoll}
         >
           {loading ? <Spinner /> : 'Create poll'}

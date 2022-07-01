@@ -7,3 +7,12 @@ const HomePage: NextPage = () => {
 };
 
 export default HomePage;
+
+// TODO:
+// 2. Password protected results
+// 3. Realtime results
+// 4. Duplication check
+// 5. Name based answers
+// 5.1 Name based results
+// 6. Comments
+// 7. Share

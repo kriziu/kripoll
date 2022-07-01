@@ -4,6 +4,8 @@ import axios from 'axios';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 
+import { COLORS } from '@/common/constants/COLORS';
+
 import { usePoll } from '../context/pollContext';
 import Btns from './Btns';
 
@@ -30,8 +32,8 @@ const OptionScore = ({
       </div>
       <div className="h-5 w-full rounded-lg bg-zinc-400/20">
         <div
-          className={`h-5 rounded-lg ${color}`}
-          style={{ width: `${score}%` }}
+          className="h-5 rounded-lg"
+          style={{ width: `${score}%`, backgroundColor: color }}
         ></div>
       </div>
     </div>
@@ -64,7 +66,7 @@ const Results = ({
     datasets: [
       {
         data: answersVotes,
-        backgroundColor: ['#22c55e', '#ef4444', '#3b82f6', '#8b5cf6'],
+        backgroundColor: COLORS,
         borderWidth: 0,
       },
     ],
@@ -83,7 +85,7 @@ const Results = ({
                 title={option}
                 score={totalVotes ? (votes / totalVotes) * 100 : 0}
                 votes={votes}
-                color="bg-green-500"
+                color={COLORS[index % COLORS.length]}
               />
             );
           })}
