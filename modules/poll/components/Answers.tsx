@@ -71,8 +71,6 @@ const Answers = ({
     e.preventDefault();
 
     addOptionMutation.mutate();
-
-    addOptionMutation.mutate();
   };
 
   if (!poll) return null;

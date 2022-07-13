@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useMutation } from 'react-query';
 
 import Spinner from '@/common/components/Spinner';
 
@@ -25,12 +26,25 @@ const DEFAULT_POLL_CONFIGURATION: {
 };
 
 const Home = () => {
-  const [loading, setLoading] = useState(false);
   const [pollConfiguration, setPollConfiguration] = useState<PollConfiguration>(
     DEFAULT_POLL_CONFIGURATION
   );
 
   const router = useRouter();
+
+  const createMutation = useMutation(
+    () =>
+      axios.post<any, { data: { id: string } }, PollConfiguration>(
+        '/api/create',
+        pollConfiguration
+      ),
+    {
+      onSuccess: (res) => {
+        router.push(`//${res.data.id}`);
+        setPollConfiguration(DEFAULT_POLL_CONFIGURATION);
+      },
+    }
+  );
 
   const handleCreatePoll = () => {
     const { title, answers } = pollConfiguration;
@@ -39,19 +53,7 @@ const Home = () => {
       if (!answer) block = true;
     });
 
-    if (block) return;
-
-    setLoading(true);
-    axios
-      .post<any, { data: { id: string } }, PollConfiguration>(
-        '/api/create',
-        pollConfiguration
-      )
-      .then((res) => {
-        setLoading(false);
-        router.push(`/${res.data.id}`);
-        setPollConfiguration(DEFAULT_POLL_CONFIGURATION);
-      });
+    if (!block) createMutation.mutate();
   };
 
   return (
@@ -73,7 +75,7 @@ const Home = () => {
           className="btn mt-5 mb-10 flex items-center justify-center"
           onClick={handleCreatePoll}
         >
-          {loading ? <Spinner /> : 'Create poll'}
+          {createMutation.isLoading ? <Spinner /> : 'Create poll'}
         </button>
       </div>
     </div>

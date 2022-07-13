@@ -7,6 +7,8 @@ import { IoIosStats } from 'react-icons/io';
 import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
 
+import Spinner from '@/common/components/Spinner';
+
 import { usePoll } from '../hooks/usePoll';
 
 export interface VoteType {
@@ -41,9 +43,9 @@ const Btns = ({ results, setResults, checkedAnswers }: Props) => {
 
   const handleVote = () => {
     if (!checkedAnswers?.length) toast.error('Please select an answer.');
-    if (results || !checkedAnswers || !checkedAnswers.length) return;
 
-    voteMutation.mutate();
+    if (!results && checkedAnswers && checkedAnswers.length)
+      voteMutation.mutate();
   };
 
   return (
@@ -55,8 +57,11 @@ const Btns = ({ results, setResults, checkedAnswers }: Props) => {
           </div>
         )}
         {!results && (
-          <button className="btn flex-1" onClick={handleVote}>
-            Vote
+          <button
+            className="btn flex flex-1 items-center justify-center"
+            onClick={handleVote}
+          >
+            {voteMutation.isLoading ? <Spinner /> : 'Vote'}
           </button>
         )}
 
