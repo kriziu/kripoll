@@ -1,7 +1,9 @@
-const Spinner = () => (
+const Spinner = ({ large }: { large?: boolean }) => (
   <svg
     role="status"
-    className="mr-2 h-6 w-6 animate-spin fill-black text-transparent"
+    className={`mr-2 ${
+      large ? 'h-10 w-10' : 'h-6 w-6'
+    } animate-spin fill-black text-transparent`}
     viewBox="0 0 100 101"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

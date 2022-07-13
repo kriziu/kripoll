@@ -1,12 +1,15 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 
 import axios from 'axios';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { useRouter } from 'next/router';
 import { Pie } from 'react-chartjs-2';
+import { useQuery } from 'react-query';
 
+import Loader from '@/common/components/Loader';
 import { COLORS } from '@/common/constants/COLORS';
 
-import { usePoll } from '../context/pollContext';
+import { usePoll } from '../hooks/usePoll';
 import Btns from './Btns';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -45,27 +48,25 @@ const Results = ({
 }: {
   setResults: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const { answers, id } = usePoll();
+  const { poll } = usePoll();
+  const { id } = useRouter().query;
 
-  const [answersVotes, setAnswersVotes] = useState<number[]>([]);
+  const { data, isLoading } = useQuery(['results', id], async () => {
+    const res = await axios.get<{ answersVotes: number[] }>(
+      `/api/results?id=${id}`
+    );
+    return res.data.answersVotes;
+  });
 
-  useEffect(() => {
-    axios
-      .get<{ answersVotes: number[] }>(`/api/results?id=${id}`)
-      .then((res) => {
-        setAnswersVotes(res.data.answersVotes);
-      });
-  }, [id]);
+  if (isLoading || !data) return <Loader />;
 
-  if (!answersVotes.length) return null;
+  const totalVotes = data.reduce((total, votes) => total + votes, 0);
 
-  const totalVotes = answersVotes.reduce((total, votes) => total + votes, 0);
-
-  const data = {
-    labels: answers,
+  const chartData = {
+    labels: poll?.answers,
     datasets: [
       {
-        data: answersVotes,
+        data,
         backgroundColor: COLORS,
         borderWidth: 0,
       },
@@ -76,8 +77,8 @@ const Results = ({
     <>
       <div className="mt-3 flex flex-col-reverse gap-4 md:flex-row">
         <div className="flex flex-1 flex-col gap-2">
-          {answers.map((option, index) => {
-            const votes = answersVotes[index];
+          {poll?.answers.map((option, index) => {
+            const votes = data[index];
 
             return (
               <OptionScore
@@ -97,7 +98,7 @@ const Results = ({
         <div className="flex w-full justify-center md:w-2/5">
           <div className="w-1/2 min-w-[15rem] md:w-full">
             <Pie
-              data={data}
+              data={chartData}
               options={{
                 plugins: {
                   legend: {

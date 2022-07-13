@@ -2,9 +2,12 @@ import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 
 import axios from 'axios';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { useMutation } from 'react-query';
 
-import { usePoll, useSetPoll } from '../context/pollContext';
-import type { PublicPoll } from '../context/pollContext';
+import Loader from '@/common/components/Loader';
+
+import { usePoll } from '../hooks/usePoll';
+import type { PublicPoll } from '../hooks/usePoll';
 import Btns from './Btns';
 
 const Answer = ({
@@ -43,31 +46,43 @@ const Answers = ({
 }: {
   setResults: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const { answers, allowCreateAnswer, allowMultipleAnswers, requireName, id } =
-    usePoll();
-  const setPoll = useSetPoll();
+  const { poll, refetch } = usePoll();
 
   const [checkedAnswers, setCheckedAnswers] = useState<number[]>([]);
 
   const [newAnswer, setNewAnswer] = useState('');
   const [name, setName] = useState('');
 
+  const addOptionMutation = useMutation(
+    () =>
+      axios.post<PublicPoll>('/api/addAnswer', {
+        pollId: poll?.id,
+        answer: newAnswer,
+      }),
+    {
+      onSuccess: () => {
+        refetch();
+        setNewAnswer('');
+      },
+    }
+  );
+
   const handleAddNewAnswer = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    axios
-      .post<PublicPoll>('/api/addAnswer', {
-        pollId: id,
-        answer: newAnswer,
-      })
-      .then((res) => {
-        setPoll(res.data);
-        setNewAnswer('');
-      });
+    addOptionMutation.mutate();
+
+    addOptionMutation.mutate();
   };
+
+  if (!poll) return null;
+
+  const { answers, allowCreateAnswer, allowMultipleAnswers, requireName } =
+    poll;
 
   return (
     <>
+      {addOptionMutation.isLoading && <Loader />}
       <div className="flex flex-col gap-3">
         <p className="mt-3 font-semibold">Make a choice:</p>
 

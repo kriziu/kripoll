@@ -1,11 +1,13 @@
 import { useTimeAgo } from '@/common/hooks/useTimeAgo';
 
-import { usePoll } from '../context/pollContext';
+import { usePoll } from '../hooks/usePoll';
 
 const Header = () => {
-  const { createdAt, title, description } = usePoll();
+  const { poll } = usePoll();
 
-  const timeAgo = useTimeAgo(createdAt);
+  const { createdAt, title, description } = poll || {};
+
+  const timeAgo = useTimeAgo(createdAt || new Date());
 
   return (
     <div>
