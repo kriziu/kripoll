@@ -42,6 +42,7 @@ const Answers = ({
                     ],
                   })
                 }
+                aria-label={`delete ${index + 1} answer`}
               >
                 <AiOutlineClose />
               </button>
