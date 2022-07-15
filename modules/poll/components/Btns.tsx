@@ -60,6 +60,7 @@ const Btns = ({ results, setResults, checkedAnswers }: Props) => {
           <button
             className="btn flex flex-1 items-center justify-center"
             onClick={handleVote}
+            disabled={!checkedAnswers?.length}
           >
             {voteMutation.isLoading ? <Spinner /> : 'Vote'}
           </button>

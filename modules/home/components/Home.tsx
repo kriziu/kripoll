@@ -46,13 +46,13 @@ const Home = () => {
     }
   );
 
-  const handleCreatePoll = () => {
-    const { title, answers } = pollConfiguration;
-    let block = !title;
-    answers.forEach((answer) => {
-      if (!answer) block = true;
-    });
+  const { title, answers } = pollConfiguration;
+  let block = !title;
+  answers.forEach((answer) => {
+    if (!answer) block = true;
+  });
 
+  const handleCreatePoll = () => {
     if (!block) createMutation.mutate();
   };
 
@@ -74,6 +74,7 @@ const Home = () => {
         <button
           className="btn mt-5 mb-10 flex items-center justify-center"
           onClick={handleCreatePoll}
+          disabled={block}
         >
           {createMutation.isLoading ? <Spinner /> : 'Create poll'}
         </button>

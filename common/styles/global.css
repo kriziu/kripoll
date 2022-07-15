@@ -12,7 +12,7 @@
   }
 
   .btn {
-    @apply w-full rounded-lg bg-gradient-to-br from-indigo-700 to-purple-500 p-2 transition-transform hover:scale-105 active:scale-100;
+    @apply w-full rounded-lg bg-gradient-to-br from-indigo-700 to-purple-500 p-2 transition-transform hover:scale-105 active:scale-100 disabled:cursor-not-allowed disabled:opacity-40;
   }
 
   .btn-secondary {
