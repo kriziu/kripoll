@@ -10,6 +10,12 @@ const customJestConfig = {
   moduleNameMapper: {
     // Handle module aliases (this will be automatically configured for you soon)
     '^@/common/components/(.*)$': '<rootDir>/common/components/$1',
+    '^@/common/constants/(.*)$': '<rootDir>/common/constants/$1',
+    '^@/common/hooks/(.*)$': '<rootDir>/common/hooks/$1',
+    '^@/common/layouts/(.*)$': '<rootDir>/common/layouts/$1',
+    '^@/common/lib/(.*)$': '<rootDir>/common/lib/$1',
+    '^@/common/styles/(.*)$': '<rootDir>/common/styles/$1',
+    '^@/common/types/(.*)$': '<rootDir>/common/types/$1',
 
     '^@/pages/(.*)$': '<rootDir>/pages/$1',
   },

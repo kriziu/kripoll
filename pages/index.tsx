@@ -9,8 +9,6 @@ const HomePage: NextPage = () => {
 export default HomePage;
 
 // TODO:
-// 0. Testing
-// 2. Password protected results
 // 3. Realtime results
 // 4. Duplication check
 // 5. Name based answers

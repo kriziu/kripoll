@@ -14,6 +14,7 @@ const PollC = () => {
   const { isLoading } = usePoll();
 
   const [results, setResults] = useState(false);
+  const [password, setPassword] = useState('');
 
   if (isLoading) return <Loader />;
 
@@ -31,7 +32,11 @@ const PollC = () => {
         <div className="px-6 sm:w-96 sm:px-0 md:w-160">
           <Header />
           {results ? (
-            <Results setResults={setResults} />
+            <Results
+              setResults={setResults}
+              password={password}
+              setPassword={setPassword}
+            />
           ) : (
             <Answers setResults={setResults} />
           )}
