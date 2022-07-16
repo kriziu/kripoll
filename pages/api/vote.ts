@@ -1,3 +1,4 @@
+import { serialize } from 'cookie';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { prisma } from '@/common/lib/prisma';
@@ -8,7 +9,7 @@ interface VoteRequest extends NextApiRequest {
 }
 
 const handler = async (req: VoteRequest, res: NextApiResponse) => {
-  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
   const { pollId, checkedAnswers } = req.body;
 
   const poll = await prisma.poll.findUnique({
@@ -22,7 +23,14 @@ const handler = async (req: VoteRequest, res: NextApiResponse) => {
     return votes;
   });
 
-  console.log('IP ADDRESS ', ip);
+  if (poll.endDate && poll.endDate.getTime() < Date.now())
+    return res.status(400).json({ error: 'Poll is closed' });
+
+  if (
+    (poll.duplicationCheck === 'IP' || poll.duplicationCheck === 'COOKIE') &&
+    (poll.votedIPs.includes(ip.toString()) || req.cookies['poll-vote'])
+  )
+    return res.status(403).json({ error: 'You have already voted' });
 
   await prisma.poll.update({
     where: { id: pollId },
@@ -31,7 +39,23 @@ const handler = async (req: VoteRequest, res: NextApiResponse) => {
     },
   });
 
-  // return res.status(403).end();
+  if (poll.duplicationCheck === 'IP')
+    await prisma.poll.update({
+      where: { id: pollId },
+      data: {
+        votedIPs: {
+          push: ip?.toString(),
+        },
+      },
+    });
+
+  if (poll.duplicationCheck === 'COOKIE')
+    res.setHeader(
+      'Set-Cookie',
+      serialize('poll-vote', pollId, {
+        path: `/${poll.id}`,
+      })
+    );
 
   return res.status(200).json({ message: 'Voted successfully' });
 };

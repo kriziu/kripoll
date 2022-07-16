@@ -39,7 +39,10 @@ const OptionScore = ({
       <div className="h-5 w-full rounded-lg bg-zinc-400/20">
         <motion.div
           className="h-5 rounded-lg"
-          style={{ width: `${score}%`, backgroundColor: color }}
+          initial={{ width: 0 }}
+          animate={{ width: `${score}%` }}
+          style={{ backgroundColor: color }}
+          transition={{ duration: 1, ease: [0.1, 0.1, 0.2, 1] }}
           layout
         ></motion.div>
       </div>
@@ -108,6 +111,8 @@ const Results = ({
     ],
   };
 
+  const shouldRenderChart = data.some((votes) => votes > 0);
+
   return (
     <AnimatePresence>
       <>
@@ -151,20 +156,22 @@ const Results = ({
                   Total votes: {totalVotes}
                 </p>
               </div>
-              <div className="flex w-full justify-center md:w-2/5">
-                <div className="w-1/2 min-w-[15rem] md:w-full">
-                  <Pie
-                    data={chartData}
-                    options={{
-                      plugins: {
-                        legend: {
-                          display: false,
+              {shouldRenderChart && (
+                <div className="flex w-full justify-center md:w-2/5">
+                  <div className="w-1/2 min-w-[15rem] md:w-full">
+                    <Pie
+                      data={chartData}
+                      options={{
+                        plugins: {
+                          legend: {
+                            display: false,
+                          },
                         },
-                      },
-                    }}
-                  />
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
             <Btns results setResults={setResults} />
           </>

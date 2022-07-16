@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { BiArrowBack, BiStation } from 'react-icons/bi';
 import { FaShare } from 'react-icons/fa';
 import { IoIosStats } from 'react-icons/io';
@@ -36,17 +37,35 @@ const Btns = ({ results, setResults, checkedAnswers }: Props) => {
         toast.success('Succesfully voted!');
       },
       onError: () => {
-        toast.error('You already voted!');
+        toast.error('You have already voted!');
       },
     }
   );
 
   const handleVote = () => {
-    if (!checkedAnswers?.length) toast.error('Please select an answer.');
+    if (!checkedAnswers?.length) {
+      toast.error('Please select an answer.');
+      return;
+    }
 
-    if (!results && checkedAnswers && checkedAnswers.length)
-      voteMutation.mutate();
+    if (poll?.endDate && new Date(poll.endDate).getTime() < Date.now()) {
+      toast.error('This poll has ended.');
+      return;
+    }
+
+    if (Cookies.get('poll-vote')) {
+      toast.error('You have already voted!');
+      return;
+    }
+
+    voteMutation.mutate();
   };
+
+  let disabled = !checkedAnswers?.length;
+  if (poll?.endDate)
+    disabled = disabled || new Date(poll.endDate).getTime() < Date.now();
+
+  console.log(poll?.endDate && new Date(poll.endDate).getTime() > Date.now());
 
   return (
     <div className="mt-6">
@@ -60,7 +79,7 @@ const Btns = ({ results, setResults, checkedAnswers }: Props) => {
           <button
             className="btn flex flex-1 items-center justify-center"
             onClick={handleVote}
-            disabled={!checkedAnswers?.length}
+            disabled={disabled}
           >
             {voteMutation.isLoading ? <Spinner /> : 'Vote'}
           </button>
