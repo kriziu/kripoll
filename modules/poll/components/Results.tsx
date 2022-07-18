@@ -2,11 +2,9 @@ import { Dispatch, SetStateAction } from 'react';
 
 import axios, { AxiosError } from 'axios';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { Pie } from 'react-chartjs-2';
-import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
-import { BsFillPeopleFill } from 'react-icons/bs';
 import { useQuery } from 'react-query';
 
 import Loader from '@/common/components/Loader';
@@ -14,43 +12,12 @@ import { COLORS } from '@/common/constants/COLORS';
 
 import { usePoll } from '../hooks/usePoll';
 import Answers from './Answers';
+import AnswerScore from './AnswerScore';
 import Btns from './Btns';
+import NamesResults from './NamesResults';
 import PasswordModal from './PasswordModal';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-const OptionScore = ({
-  title,
-  score,
-  votes,
-  color,
-}: {
-  title: string;
-  color: string;
-  score: number;
-  votes: number;
-}) => {
-  return (
-    <div>
-      <div className="flex items-center justify-between px-1">
-        <p>{title}</p>
-        <p className="text-xs text-zinc-400">{`${score.toFixed(
-          2
-        )}% (${votes} votes)`}</p>
-      </div>
-      <div className="h-5 w-full rounded-lg bg-zinc-400/20">
-        <motion.div
-          className="h-5 rounded-lg"
-          initial={{ width: 0 }}
-          animate={{ width: `${score}%` }}
-          style={{ backgroundColor: color }}
-          transition={{ duration: 1, ease: [0.1, 0.1, 0.2, 1] }}
-          layout
-        ></motion.div>
-      </div>
-    </div>
-  );
-};
 
 const Results = ({
   setResults,
@@ -146,7 +113,7 @@ const Results = ({
                   const votes = data.answersVotes[index];
 
                   return (
-                    <OptionScore
+                    <AnswerScore
                       key={index}
                       title={option}
                       score={totalVotes ? (votes / totalVotes) * 100 : 0}
@@ -162,6 +129,7 @@ const Results = ({
                   Total votes: {totalVotes}
                 </p>
               </div>
+
               {shouldRenderChart && (
                 <div className="flex w-full justify-center md:w-2/5">
                   <div className="w-1/2 min-w-[15rem] md:w-full">
@@ -179,60 +147,9 @@ const Results = ({
                 </div>
               )}
             </div>
-            {poll?.requireName && (
-              <div className="mt-10">
-                <h2 className="mb-2 flex items-center gap-2 text-lg font-semibold leading-none">
-                  <BsFillPeopleFill /> Who voted what?
-                </h2>
 
-                <table className="w-full table-fixed border-separate border-spacing-1">
-                  <thead>
-                    <tr>
-                      <th className="w-36"></th>
-                      {poll?.answers.map((answer, index) => (
-                        <th key={index}>{answer}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.namesVoted?.map((nameVoted, index) => (
-                      <tr key={index}>
-                        <td>
-                          <p
-                            className="w-36 overflow-hidden truncate"
-                            title={nameVoted.name}
-                          >
-                            {nameVoted.name}
-                          </p>
-                        </td>
-                        {poll?.answers.map((_, answerIndex) => {
-                          const voted = nameVoted.voted.some(
-                            (indexVoted) => indexVoted === answerIndex
-                          );
+            {poll?.requireName && <NamesResults namesVoted={data.namesVoted} />}
 
-                          return (
-                            <td key={`${answerIndex}${index}`}>
-                              <div
-                                className={`${
-                                  voted ? 'bg-green-500/50' : 'bg-red-500/50'
-                                } flex h-full items-center justify-center rounded-md p-2`}
-                                key={answerIndex}
-                              >
-                                {voted ? (
-                                  <AiOutlineCheck />
-                                ) : (
-                                  <AiOutlineClose />
-                                )}
-                              </div>
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
             <Btns results setResults={setResults} />
           </>
         )}
