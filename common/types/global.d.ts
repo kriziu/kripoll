@@ -10,4 +10,9 @@ export declare global {
     endDate?: Date;
     passwordToResults?: string;
   }
+
+  interface NameVoted {
+    name: string;
+    voted: number[];
+  }
 }

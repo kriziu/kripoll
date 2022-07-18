@@ -13,7 +13,7 @@ const Header = () => {
     <div>
       <h1 className="text-3xl font-bold leading-none">{title}</h1>
       {endDate && (
-        <h2
+        <p
           className={`mb-2 text-sm font-semibold leading-none ${
             new Date(endDate).getTime() < Date.now()
               ? 'text-red-500'
@@ -21,7 +21,7 @@ const Header = () => {
           }`}
         >
           Ending: {new Date(endDate).toLocaleString()}
-        </h2>
+        </p>
       )}
       <p className="ml-1 mt-1 text-sm leading-none text-zinc-400">{timeAgo}</p>
       {description && (

@@ -15,15 +15,17 @@ import { usePoll } from '../hooks/usePoll';
 export interface VoteType {
   pollId: string;
   checkedAnswers: number[];
+  name?: string;
 }
 
 interface Props {
   results?: boolean;
   setResults: Dispatch<SetStateAction<boolean>>;
   checkedAnswers?: number[];
+  name?: string;
 }
 
-const Btns = ({ results, setResults, checkedAnswers }: Props) => {
+const Btns = ({ results, setResults, checkedAnswers, name }: Props) => {
   const { poll } = usePoll();
 
   const voteMutation = useMutation(
@@ -31,6 +33,7 @@ const Btns = ({ results, setResults, checkedAnswers }: Props) => {
       axios.post('/api/vote', {
         pollId: poll?.id,
         checkedAnswers,
+        name,
       }),
     {
       onSuccess: () => {
@@ -48,6 +51,11 @@ const Btns = ({ results, setResults, checkedAnswers }: Props) => {
       return;
     }
 
+    if (!name || name.length < 3) {
+      toast.error('Please enter your name.');
+      return;
+    }
+
     if (poll?.endDate && new Date(poll.endDate).getTime() < Date.now()) {
       toast.error('This poll has ended.');
       return;
@@ -61,11 +69,9 @@ const Btns = ({ results, setResults, checkedAnswers }: Props) => {
     voteMutation.mutate();
   };
 
-  let disabled = !checkedAnswers?.length;
+  let disabled = !name || name.length < 3 || !checkedAnswers?.length;
   if (poll?.endDate)
     disabled = disabled || new Date(poll.endDate).getTime() < Date.now();
-
-  console.log(poll?.endDate && new Date(poll.endDate).getTime() > Date.now());
 
   return (
     <div className="mt-6">

@@ -19,6 +19,7 @@ const handler = async (req: CreateRequest, res: NextApiResponse) => {
       ...req.body,
       passwordToResults: hashedPassword,
       answersVotes: req.body.answers.map(() => 0),
+      namesVoted: [],
     },
   });
 

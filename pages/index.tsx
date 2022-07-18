@@ -9,7 +9,5 @@ const HomePage: NextPage = () => {
 export default HomePage;
 
 // TODO:
-// 5. Name based answers
-// 5.1 Name based results
 // 6. Comments
 // 7. Share

@@ -27,4 +27,5 @@ model Poll {
   votedIPs    String[]
   endDate     DateTime?
   passwordToResults    String?
+  namesVoted Json?
 }

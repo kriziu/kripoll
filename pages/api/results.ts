@@ -23,9 +23,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(401).json({ error: 'Wrong password' });
   }
 
-  const { answersVotes } = poll;
+  const { answersVotes, namesVoted } = poll;
 
-  return res.status(200).json({ answersVotes });
+  return res.status(200).json({ answersVotes, namesVoted });
 };
 
 export default handler;

@@ -10,18 +10,13 @@ interface VoteRequest extends NextApiRequest {
 
 const handler = async (req: VoteRequest, res: NextApiResponse) => {
   const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
-  const { pollId, checkedAnswers } = req.body;
+  const { pollId, checkedAnswers, name } = req.body;
 
   const poll = await prisma.poll.findUnique({
     where: { id: pollId },
   });
 
   if (!poll) return res.status(404).json({ error: 'Poll not found' });
-
-  const newVotes = poll.answersVotes.map((votes, index) => {
-    if (checkedAnswers.includes(index)) return votes + 1;
-    return votes;
-  });
 
   if (poll.endDate && poll.endDate.getTime() < Date.now())
     return res.status(400).json({ error: 'Poll is closed' });
@@ -32,10 +27,18 @@ const handler = async (req: VoteRequest, res: NextApiResponse) => {
   )
     return res.status(403).json({ error: 'You have already voted' });
 
+  const newVotes = poll.answersVotes.map((votes, index) => {
+    if (checkedAnswers.includes(index)) return votes + 1;
+    return votes;
+  });
+
+  const namesVoted = poll.namesVoted as unknown as NameVoted[];
+
   await prisma.poll.update({
     where: { id: pollId },
     data: {
       answersVotes: newVotes,
+      namesVoted: [...namesVoted, { name, voted: checkedAnswers }],
     },
   });
 

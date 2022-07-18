@@ -5,6 +5,8 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { Pie } from 'react-chartjs-2';
+import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
+import { BsFillPeopleFill } from 'react-icons/bs';
 import { useQuery } from 'react-query';
 
 import Loader from '@/common/components/Loader';
@@ -66,10 +68,11 @@ const Results = ({
   const { data, isLoading, error, refetch } = useQuery(
     ['results', id],
     async () => {
-      const res = await axios.get<{ answersVotes: number[] }>(
-        `/api/results?id=${id}&password=${password}`
-      );
-      return res.data.answersVotes;
+      const res = await axios.get<{
+        answersVotes: number[];
+        namesVoted: NameVoted[] | undefined;
+      }>(`/api/results?id=${id}&password=${password}`);
+      return res.data;
     },
     {
       retry: false,
@@ -98,20 +101,23 @@ const Results = ({
     );
   }
 
-  const totalVotes = data.reduce((total, votes) => total + votes, 0);
+  const totalVotes = data.answersVotes.reduce(
+    (total, votes) => total + votes,
+    0
+  );
 
   const chartData = {
     labels: poll?.answers,
     datasets: [
       {
-        data,
+        data: data.answersVotes,
         backgroundColor: COLORS,
         borderWidth: 0,
       },
     ],
   };
 
-  const shouldRenderChart = data.some((votes) => votes > 0);
+  const shouldRenderChart = data.answersVotes.some((votes) => votes > 0);
 
   return (
     <AnimatePresence>
@@ -137,7 +143,7 @@ const Results = ({
             <div className="mt-3 flex flex-col-reverse gap-4 md:flex-row">
               <div className="flex flex-1 flex-col gap-2">
                 {poll?.answers.map((option, index) => {
-                  const votes = data[index];
+                  const votes = data.answersVotes[index];
 
                   return (
                     <OptionScore
@@ -173,6 +179,60 @@ const Results = ({
                 </div>
               )}
             </div>
+            {poll?.requireName && (
+              <div className="mt-10">
+                <h2 className="mb-2 flex items-center gap-2 text-lg font-semibold leading-none">
+                  <BsFillPeopleFill /> Who voted what?
+                </h2>
+
+                <table className="w-full table-fixed border-separate border-spacing-1">
+                  <thead>
+                    <tr>
+                      <th className="w-36"></th>
+                      {poll?.answers.map((answer, index) => (
+                        <th key={index}>{answer}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.namesVoted?.map((nameVoted, index) => (
+                      <tr key={index}>
+                        <td>
+                          <p
+                            className="w-36 overflow-hidden truncate"
+                            title={nameVoted.name}
+                          >
+                            {nameVoted.name}
+                          </p>
+                        </td>
+                        {poll?.answers.map((_, answerIndex) => {
+                          const voted = nameVoted.voted.some(
+                            (indexVoted) => indexVoted === answerIndex
+                          );
+
+                          return (
+                            <td key={`${answerIndex}${index}`}>
+                              <div
+                                className={`${
+                                  voted ? 'bg-green-500/50' : 'bg-red-500/50'
+                                } flex h-full items-center justify-center rounded-md p-2`}
+                                key={answerIndex}
+                              >
+                                {voted ? (
+                                  <AiOutlineCheck />
+                                ) : (
+                                  <AiOutlineClose />
+                                )}
+                              </div>
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
             <Btns results setResults={setResults} />
           </>
         )}

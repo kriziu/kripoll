@@ -134,7 +134,11 @@ const Answers = ({
           </div>
         )}
       </div>
-      <Btns setResults={setResults} checkedAnswers={checkedAnswers} />
+      <Btns
+        setResults={setResults}
+        checkedAnswers={checkedAnswers}
+        name={name}
+      />
     </>
   );
 };
