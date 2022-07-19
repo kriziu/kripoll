@@ -9,5 +9,5 @@ const HomePage: NextPage = () => {
 export default HomePage;
 
 // TODO:
-// 6. Comments
-// 7. Share
+// 5. Join by pin code
+// 6. Share

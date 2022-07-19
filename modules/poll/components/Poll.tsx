@@ -6,9 +6,9 @@ import Loader from '@/common/components/Loader';
 
 import { usePoll } from '../hooks/usePoll';
 import Answers from './Answers';
-import Comments from './Comments';
 import Header from './Header';
 import Results from './Results';
+import Share from './Share';
 
 const PollC = () => {
   const { isLoading } = usePoll();
@@ -41,7 +41,7 @@ const PollC = () => {
             <Answers setResults={setResults} />
           )}
 
-          <Comments />
+          <Share />
         </div>
       </div>
     </>

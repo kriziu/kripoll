@@ -3,7 +3,6 @@ import { Dispatch, SetStateAction } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { BiArrowBack, BiStation } from 'react-icons/bi';
-import { FaShare } from 'react-icons/fa';
 import { IoIosStats } from 'react-icons/io';
 import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
@@ -51,7 +50,7 @@ const Btns = ({ results, setResults, checkedAnswers, name }: Props) => {
       return;
     }
 
-    if (!name || name.length < 3) {
+    if (poll?.requireName && (!name || name.length < 3)) {
       toast.error('Please enter your name.');
       return;
     }
@@ -69,7 +68,9 @@ const Btns = ({ results, setResults, checkedAnswers, name }: Props) => {
     voteMutation.mutate();
   };
 
-  let disabled = !name || name.length < 3 || !checkedAnswers?.length;
+  let disabled =
+    (poll?.requireName && (!name || name.length < 3)) ||
+    !checkedAnswers?.length;
   if (poll?.endDate)
     disabled = disabled || new Date(poll.endDate).getTime() < Date.now();
 
@@ -91,28 +92,22 @@ const Btns = ({ results, setResults, checkedAnswers, name }: Props) => {
           </button>
         )}
 
-        <div className="flex flex-1 gap-4">
-          {results && (
-            <button
-              className="btn-secondary flex flex-1 items-center justify-center gap-1"
-              onClick={() => setResults(false)}
-            >
-              <BiArrowBack /> Poll
-            </button>
-          )}
-          {!results && (
-            <button
-              className="btn-secondary flex flex-1 items-center justify-center gap-1"
-              onClick={() => setResults(true)}
-            >
-              <IoIosStats /> Results
-            </button>
-          )}
-
-          <button className="btn-secondary flex flex-1 items-center justify-center gap-1">
-            <FaShare /> Share
+        {results && (
+          <button
+            className="btn-secondary flex flex-1 items-center justify-center gap-1"
+            onClick={() => setResults(false)}
+          >
+            <BiArrowBack /> Poll
           </button>
-        </div>
+        )}
+        {!results && (
+          <button
+            className="btn-secondary flex flex-1 items-center justify-center gap-1"
+            onClick={() => setResults(true)}
+          >
+            <IoIosStats /> Results
+          </button>
+        )}
       </div>
     </div>
   );
