@@ -72,7 +72,7 @@ const ModalManager = ({ children }: { children: JSX.Element }) => {
     >
       <Portal>
         <motion.div
-          className="absolute top-0 left-0 flex h-full w-full items-center justify-center bg-black/50"
+          className="fixed top-0 left-0 flex h-full w-full items-center justify-center bg-black/50"
           onClick={() => closeModal()}
           variants={bgAnimation}
           initial="closed"

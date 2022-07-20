@@ -4,12 +4,12 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '@/common/lib/prisma';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const pollId = req.query.id;
+  const { id } = req.query;
 
-  if (!pollId) return res.status(400).json({ error: 'Missing poll id' });
+  if (!id) return res.status(400).json({ error: 'Missing poll id' });
 
   const poll = await prisma.poll.findUnique({
-    where: { id: pollId.toString() },
+    where: { id: id.toString() },
   });
 
   if (!poll) return res.status(404).json({ error: 'Poll not found' });

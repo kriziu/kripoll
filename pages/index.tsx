@@ -7,7 +7,3 @@ const HomePage: NextPage = () => {
 };
 
 export default HomePage;
-
-// TODO:
-// 5. Join by pin code
-// 6. Share

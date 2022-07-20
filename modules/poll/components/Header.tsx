@@ -3,14 +3,20 @@ import { useTimeAgo } from '@/common/hooks/useTimeAgo';
 import { usePoll } from '../hooks/usePoll';
 
 const Header = () => {
-  const { poll } = usePoll();
+  const { poll, pinCode } = usePoll();
 
   const { createdAt, title, description, endDate } = poll || {};
 
   const timeAgo = useTimeAgo(createdAt || new Date());
 
   return (
-    <div>
+    <div className="relative">
+      {pinCode && (
+        <p className="absolute bottom-full left-1/2 mb-2 w-max -translate-x-1/2 rounded-lg bg-violet-300 px-2 py-1 text-lg font-semibold text-violet-700 md:right-0">
+          Pin code: {pinCode}
+        </p>
+      )}
+
       <h1 className="text-3xl font-bold leading-none">{title}</h1>
       {endDate && (
         <p

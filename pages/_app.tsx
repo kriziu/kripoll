@@ -1,7 +1,7 @@
 import '../common/styles/global.css';
+import { QueryClientProvider } from '@tanstack/react-query';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import { QueryClientProvider } from 'react-query';
 
 import MainLayout from '@/common/layouts/mainLayout';
 import { queryClient } from '@/common/lib/queryClient';

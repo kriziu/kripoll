@@ -1,7 +1,7 @@
 import type { Poll } from '@prisma/client';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
 
 export type PublicPoll = Omit<
   Poll,
@@ -16,12 +16,15 @@ export const usePoll = () => {
   const { isError, isLoading, data, refetch } = useQuery(
     ['poll', id],
     async () => {
-      const res = await axios.get<PublicPoll>(`/api/find?id=${id}`);
+      const res = await axios.get<{ poll: PublicPoll; pinCode?: string }>(
+        `/api/find?id=${id}`
+      );
       return res.data;
-    }
+    },
+    { refetchInterval: 1000 * 30, enabled: !!id }
   );
 
   if (isError) router.push('/');
 
-  return { isLoading, poll: data, refetch };
+  return { ...data, isLoading, refetch };
 };

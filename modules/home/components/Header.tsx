@@ -1,6 +1,6 @@
 const Header = () => {
   return (
-    <div className="my-10 md:my-24">
+    <div className="my-10 md:mt-24">
       <h1 className="bg-gradient-to-br from-indigo-700 to-purple-500 bg-clip-text text-center text-6xl font-extrabold leading-none text-transparent md:text-extra">
         KRIPOLL
       </h1>

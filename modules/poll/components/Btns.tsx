@@ -1,10 +1,10 @@
 import { Dispatch, SetStateAction } from 'react';
 
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { BiArrowBack, BiStation } from 'react-icons/bi';
 import { IoIosStats } from 'react-icons/io';
-import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
 
 import Spinner from '@/common/components/Spinner';
@@ -29,14 +29,16 @@ const Btns = ({ results, setResults, checkedAnswers, name }: Props) => {
 
   const voteMutation = useMutation(
     () =>
-      axios.post('/api/vote', {
+      axios.post<{ cookie?: boolean }>('/api/vote', {
         pollId: poll?.id,
         checkedAnswers,
         name,
       }),
     {
-      onSuccess: () => {
+      onSuccess: (res) => {
         toast.success('Succesfully voted!');
+        if (res.data.cookie)
+          Cookies.set('poll-vote', poll!.id, { path: `/${poll?.id}` });
       },
       onError: () => {
         toast.error('You have already voted!');

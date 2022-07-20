@@ -1,10 +1,10 @@
 import { Dispatch, SetStateAction, useEffect } from 'react';
 
+import { useQuery } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { useRouter } from 'next/router';
 import { Pie } from 'react-chartjs-2';
-import { useQuery } from 'react-query';
 
 import Loader from '@/common/components/Loader';
 import { COLORS } from '@/common/constants/COLORS';

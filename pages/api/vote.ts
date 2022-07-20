@@ -22,8 +22,8 @@ const handler = async (req: VoteRequest, res: NextApiResponse) => {
     return res.status(400).json({ error: 'Poll is closed' });
 
   if (
-    (poll.duplicationCheck === 'IP' || poll.duplicationCheck === 'COOKIE') &&
-    (poll.votedIPs.includes(ip.toString()) || req.cookies['poll-vote'])
+    (poll.duplicationCheck === 'IP' && poll.votedIPs.includes(ip.toString())) ||
+    (poll.duplicationCheck === 'COOKIE' && req.cookies['poll-vote'])
   )
     return res.status(403).json({ error: 'You have already voted' });
 
@@ -60,7 +60,10 @@ const handler = async (req: VoteRequest, res: NextApiResponse) => {
       })
     );
 
-  return res.status(200).json({ message: 'Voted successfully' });
+  return res.status(200).json({
+    message: 'Voted successfully',
+    cookie: poll.duplicationCheck === 'COOKIE',
+  });
 };
 
 export default handler;

@@ -1,13 +1,14 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useMutation } from 'react-query';
 
 import Spinner from '@/common/components/Spinner';
 
 import Header from './Header';
 import Inputs from './Inputs';
+import JoinPin from './JoinPin';
 import Settings from './Settings';
 
 export interface PollConfigurationProps {
@@ -60,7 +61,15 @@ const Home = () => {
     <div className="flex h-full w-full flex-col items-center">
       <Header />
 
+      <JoinPin />
+
       <div className="w-full px-6 sm:w-96 sm:px-0 md:w-160">
+        <div className="mb-5 flex w-full items-center gap-2 font-semibold text-zinc-600">
+          <div className="h-px flex-1 bg-zinc-700"></div>
+          or
+          <div className="h-px flex-1 bg-zinc-700"></div>
+        </div>
+
         <Inputs
           pollConfiguration={pollConfiguration}
           setPollConfiguration={setPollConfiguration}
