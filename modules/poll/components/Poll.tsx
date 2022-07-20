@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import Head from 'next/head';
 import Link from 'next/link';
 
 import Loader from '@/common/components/Loader';
@@ -11,7 +12,7 @@ import Results from './Results';
 import Share from './Share';
 
 const PollC = () => {
-  const { isLoading } = usePoll();
+  const { isLoading, poll } = usePoll();
 
   const [results, setResults] = useState(false);
   const [password, setPassword] = useState('');
@@ -20,6 +21,10 @@ const PollC = () => {
 
   return (
     <>
+      <Head>
+        <title>Kripoll - {poll?.title}</title>
+      </Head>
+
       <div className="ml-4 pt-4 md:ml-10 md:pt-10">
         <Link href="/">
           <a className="bg-gradient-to-br from-indigo-700 to-purple-500 bg-clip-text text-center text-4xl font-extrabold uppercase leading-none text-transparent">

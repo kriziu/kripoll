@@ -10,7 +10,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   return (
     <QueryClientProvider client={queryClient}>
       <Head>
-        <title>Template</title>
+        <title>Kripoll - Create your poll</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MainLayout>
