@@ -26,13 +26,10 @@ const Inputs = ({
         />
       </div>
       <div>
-        <div className="flex w-full justify-between">
-          <label className="font-bold" htmlFor="desc">
-            Description{' '}
-            <span className="font-bold text-zinc-600">(optional)</span>
-          </label>
-          <button className="btn-text">Image</button>
-        </div>
+        <label className="font-bold" htmlFor="desc">
+          Description{' '}
+          <span className="font-bold text-zinc-600">(optional)</span>
+        </label>
         <input
           className="input"
           type="text"

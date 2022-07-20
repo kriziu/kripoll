@@ -41,7 +41,7 @@ const Home = () => {
       ),
     {
       onSuccess: (res) => {
-        router.push(`//${res.data.id}`);
+        router.push(`/${res.data.id}`);
         setPollConfiguration(DEFAULT_POLL_CONFIGURATION);
       },
     }
