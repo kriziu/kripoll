@@ -2,12 +2,12 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import { BiArrowBack, BiStation } from 'react-icons/bi';
 import { IoIosStats } from 'react-icons/io';
 import { toast } from 'react-toastify';
 
 import Spinner from '@/common/components/Spinner';
+import { addPollVoted, isPollVoted } from '@/common/lib/pollsVoted';
 
 import { usePoll } from '../hooks/usePoll';
 
@@ -37,8 +37,8 @@ const Btns = ({ results, setResults, checkedAnswers, name }: Props) => {
     {
       onSuccess: (res) => {
         toast.success('Succesfully voted!');
-        if (res.data.cookie)
-          Cookies.set('poll-vote', poll!.id, { path: `/${poll?.id}` });
+
+        if (res.data.cookie) addPollVoted(poll!.id);
       },
       onError: () => {
         toast.error('You have already voted!');
@@ -62,7 +62,7 @@ const Btns = ({ results, setResults, checkedAnswers, name }: Props) => {
       return;
     }
 
-    if (Cookies.get('poll-vote')) {
+    if (isPollVoted(poll!.id)) {
       toast.error('You have already voted!');
       return;
     }
