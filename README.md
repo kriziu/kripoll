@@ -9,9 +9,7 @@ Application that is similar to strawpoll.com. Create poll, vote and check result
 - React-Query
 - TailwindCSS
 - Framer-motion
-## Demo
 
-https://kripoll.herokuapp.com
 ## Installation
 
 
